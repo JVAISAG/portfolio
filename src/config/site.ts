@@ -1,10 +1,12 @@
+import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
+
 export const siteConfig = {
   name: "Vaisag J",
   role: "Computer Science Engineer",
   title: "AI Portfolio & Resume",
   description:
     "An interactive AI-narrated portfolio showcasing my experience in systems programming, backend engineering, distributed systems, security, and machine learning.",
-  url: "https://ai-resume.vercel.app", // Update with your actual deployment URL
+  url: "https://portfolio-seven-hazel-46.vercel.app/", // Update with your actual deployment URL
   resume: "/resume.pdf", // Place your resume PDF in the public folder named resume.pdf
 
   hero: {
@@ -108,6 +110,7 @@ export const siteConfig = {
         "Docker",
         "AWS EC2",
       ],
+      github: "https://github.com/JVAISAG/network-IDS",
       highlights: [
         "Designed and built a 5-service pipeline consisting of an ingestion API, rules-based correlation engine, ML anomaly scorer, broadcast server, and live dashboard.",
         "Implemented sliding time-window correlation per source IP to escalate alerts when multiple distinct attack types are detected from the same host.",
@@ -127,7 +130,7 @@ export const siteConfig = {
         "asyncpg",
         "Docker Compose",
       ],
-      github: "https://github.com/jvaisag/pgflow",
+      github: "https://github.com/jvaisag/Job-scheduler",
       highlights: [
         "Built a Celery/Airflow-style distributed job scheduler using PostgreSQL as the sole coordination layer.",
         "Implemented DAG-based job dependencies across concurrent worker processes.",
