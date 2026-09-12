@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-error: var(--error);
+}
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #33ff00;
+  --primary: #33ff00;
+  --secondary: #ffb000;
+  --muted: #1f521f;
+  --border: #1f521f;
+  --accent: #33ff00;
+  --error: #ff3333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: none; /* Make fonts look more pixelated/raw */
+  text-shadow: 0 0 5px rgba(51, 255, 0, 0.4);
+}
+
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+  text-shadow: none;
+}
+
+/* CRT Scanlines Overlay */
+.crt-overlay::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Blinking animation for cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Inverted style (e.g. for hover or active selection) */
+.inverted {
+  background-color: var(--primary);
+  color: #000;
+  text-shadow: none;
+}
+
+/* Ensure icons stroke width looks pixelated/terminal-like */
+svg {
+  stroke-width: 1.5px;
+}
