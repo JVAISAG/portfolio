@@ -25,7 +25,7 @@ export default function Footer() {
               <Github className="w-5 h-5 group-hover:text-black" />
             </a>
             <a
-              href="https://linkedin.com/in/vaisag-j"
+              href="https://www.linkedin.com/in/vaisag-j-6648a9291"
               target="_blank"
               className="p-2 border border-primary hover:inverted transition-none group"
             >
