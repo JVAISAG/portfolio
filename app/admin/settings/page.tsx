@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { useState, use, useEffect } from "react";
+import { useState } from "react";
 import { getSettings, updateSettings } from "@/app/admin/actions";
 import Link from "next/link";
 
@@ -58,9 +58,9 @@ export default function SettingsPage() {
       await updateSettings(values);
       setSuccess(true);
       router.refresh();
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || "An error occurred");
+      setError(err instanceof Error && err.message ? err.message : "An error occurred");
     } finally {
       setIsSubmitting(false);
     }

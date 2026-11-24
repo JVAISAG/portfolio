@@ -2,8 +2,19 @@
 
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+
+export type GithubRepository = {
+  id: number;
+  name: string;
+  description: string | null;
+  language: string | null;
+  topics?: string[];
+  html_url: string;
+  fork: boolean;
+  owner: { login: string };
+};
 
 // Utility to check auth
 async function checkAuth() {
@@ -30,7 +41,7 @@ export async function getProjectById(id: string) {
   });
 }
 
-export async function createProject(data: any) {
+export async function createProject(data: Prisma.ProjectCreateInput) {
   await checkAuth();
   
   const project = await prisma.project.create({
@@ -42,7 +53,7 @@ export async function createProject(data: any) {
   return project;
 }
 
-export async function updateProject(id: string, data: any) {
+export async function updateProject(id: string, data: Prisma.ProjectUpdateInput) {
   await checkAuth();
   
   const project = await prisma.project.update({
@@ -67,12 +78,12 @@ export async function deleteProject(id: string) {
   revalidatePath("/");
 }
 
-export async function importGithubProjects(repos: any[]) {
+export async function importGithubProjects(repos: GithubRepository[]) {
   await checkAuth();
 
   for (const repo of repos) {
     // Generate a slug from the repo name
-    let baseSlug = repo.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+    const baseSlug = repo.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
     let slug = baseSlug;
     
     // Check for slug collisions and append random string if necessary
@@ -136,7 +147,7 @@ export async function getSettings() {
   return settings;
 }
 
-export async function updateSettings(data: any) {
+export async function updateSettings(data: Prisma.SiteSettingsCreateInput) {
   await checkAuth();
   
   const settings = await prisma.siteSettings.findFirst();

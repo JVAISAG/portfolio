@@ -13,15 +13,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ user }) {
-      const authorizedEmail = process.env.ADMIN_EMAIL;
-      
-      // Only allow the authorized admin email to log in
-      if (user.email === authorizedEmail) {
-        return true;
-      }
-      
-      // Return false to reject the sign in
-      return false;
+      const authorizedEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+      return Boolean(authorizedEmail && user.email?.trim().toLowerCase() === authorizedEmail);
     },
   },
 });

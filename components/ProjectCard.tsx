@@ -1,10 +1,13 @@
 import { Github, ArrowUpRight, FolderGit2 } from "lucide-react";
+import type { Project } from "@prisma/client";
 
-export default function ProjectCard({ project }: { project: any }) {
+type CardProject = Pick<Project, "title" | "shortDesc" | "tech" | "githubUrl" | "liveUrl" | "featured">;
+
+export default function ProjectCard({ project }: { project: CardProject }) {
   // Map Prisma project to frontend fields
   const title = project.title;
   const description = project.shortDesc;
-  const tech = Array.isArray(project.tech) ? project.tech.join(" / ") : project.tech;
+  const tech = project.tech.join(" / ");
   const githubUrl = project.githubUrl;
   const liveUrl = project.liveUrl;
   const Icon = FolderGit2; // Default icon since it's not in the DB

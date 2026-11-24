@@ -3,21 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "prebuild": "prisma generate",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "db:migrate": "prisma migrate deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
     "@prisma/client": "^5.0.0",
+    "dotenv": "^17.4.2",
     "lucide-react": "^0.468.0",
-    "next": "16.2.1",
+    "next": "16.4.6",
     "next-auth": "^5.0.0-beta.32",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.86.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -25,7 +28,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.1",
+    "eslint-config-next": "16.4.6",
     "prisma": "^5.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"

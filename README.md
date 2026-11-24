@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vaisag J portfolio
 
-## Getting Started
+The portfolio uses Next.js, PostgreSQL through Prisma, and GitHub OAuth for the admin area.
 
-First, run the development server:
+## Local setup
+
+Use Node.js 22 or 24 and npm. Copy `.env.example` to `.env` and fill in the values. Keep your local secrets out of Git. If you already use `.env.local` for Next.js, set `DATABASE_URL` in the shell when running Prisma commands so they target the same database.
 
 ```bash
+npm ci
+npm run db:migrate
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run `db:migrate` on a new database. Follow the baseline instructions below when reusing a database that already has the portfolio tables. Open [localhost:3000](http://localhost:3000) for the site and [localhost:3000/admin/login](http://localhost:3000/admin/login) for admin sign-in.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Use a Next.js host with a Node.js runtime. Set these variables in the hosting environment before building.
 
-## Learn More
+| Variable | Value |
+| --- | --- |
+| `DATABASE_URL` | PostgreSQL connection string for the portfolio database. |
+| `AUTH_URL` | The public HTTPS origin for the site, such as `https://portfolio.example.com`. |
+| `AUTH_SECRET` | A unique secret for production. Generate one with `npx auth secret`. |
+| `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET` | The production GitHub OAuth application's client ID and secret. |
+| `ADMIN_EMAIL` | The verified email address of the GitHub account allowed to sign in. |
+| `NEXT_PUBLIC_ADMIN_LINKEDIN` | The public LinkedIn profile URL used on the Contact page. |
 
-To learn more about Next.js, take a look at the following resources:
+Register `https://<your-domain>/api/auth/callback/github` in the production GitHub OAuth app. Use a separate GitHub OAuth app for localhost if you need both callback URLs. Verify the full GitHub sign-in on the deployed domain.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Database
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Existing database with the published portfolio projects.** Keep its connection string to preserve those records. If the tables were originally created without Prisma Migrate, back up the database and confirm the schema matches before baselining. Run `npx prisma migrate diff --from-schema-datasource prisma/schema.prisma --to-schema-datamodel prisma/schema.prisma --exit-code` and proceed only if it exits with code `0`. Record the baseline once with `npx prisma migrate resolve --applied 0_init`, then use `npm run db:migrate` for subsequent deploys.
+- **Empty database.** Run `npm run db:migrate` to create the schema. Restore the project records from the existing database or add them through the admin interface before launching.
 
-## Deploy on Vercel
+### Build and check
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm ci
+npm run lint
+npm audit --omit=dev
+npm run build
+npm run start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The build generates the Prisma client and runs Next.js type checking. For a managed Next.js host, use its standard build and start workflow after applying the database migrations. Check `/projects`, the Contact page links, and GitHub admin sign-in on the hosted site.

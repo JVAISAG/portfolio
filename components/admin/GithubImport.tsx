@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { importGithubProjects } from "@/app/admin/actions";
+import { importGithubProjects, type GithubRepository } from "@/app/admin/actions";
 import { Github, Download, Loader2, X } from "lucide-react";
 
 export default function GithubImport() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
-  const [repos, setRepos] = useState<any[]>([]);
+  const [repos, setRepos] = useState<GithubRepository[]>([]);
   const [selectedRepos, setSelectedRepos] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [importing, setImporting] = useState(false);
@@ -20,10 +20,10 @@ export default function GithubImport() {
     try {
       const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
       if (!res.ok) throw new Error("Failed to fetch repositories");
-      const data = await res.json();
-      setRepos(data.filter((r: any) => !r.fork)); // Ignore forks by default
-    } catch (err: any) {
-      setError(err.message);
+      const data: GithubRepository[] = await res.json();
+      setRepos(data.filter((repo) => !repo.fork));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch repositories");
     } finally {
       setLoading(false);
     }
@@ -54,8 +54,8 @@ export default function GithubImport() {
       setRepos([]);
       setSelectedRepos([]);
       setUsername("");
-    } catch (err: any) {
-      setError(err.message || "Failed to import projects");
+    } catch (err) {
+      setError(err instanceof Error && err.message ? err.message : "Failed to import projects");
     } finally {
       setImporting(false);
     }

@@ -50,7 +50,7 @@ export default async function AdminProjects() {
                 </tr>
               </thead>
               <tbody>
-                {projects.map((project: any) => (
+                {projects.map((project) => (
                   <tr key={project.id} className="border-b border-primary/30 hover:bg-primary/5">
                     <td className="p-2">{project.title}</td>
                     <td className="p-2 opacity-70">{project.slug}</td>

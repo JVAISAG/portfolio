@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import type { Project } from "@prisma/client";
 import { createProject, updateProject } from "@/app/admin/actions";
 
 const projectSchema = z.object({
@@ -21,21 +22,9 @@ const projectSchema = z.object({
   order: z.number(),
 });
 
-type ProjectFormValues = {
-  title: string;
-  slug: string;
-  shortDesc: string;
-  fullDesc?: string;
-  imageUrl?: string;
-  tech: string;
-  githubUrl?: string;
-  liveUrl?: string;
-  featured: boolean;
-  published: boolean;
-  order: number;
-};
+type ProjectFormValues = z.infer<typeof projectSchema>;
 
-export default function ProjectForm({ initialData = null }: { initialData?: any }) {
+export default function ProjectForm({ initialData = null }: { initialData?: Project | null }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,9 +75,9 @@ export default function ProjectForm({ initialData = null }: { initialData?: any 
       }
       router.push("/admin/projects");
       router.refresh();
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || "An error occurred");
+      setError(err instanceof Error && err.message ? err.message : "An error occurred");
     } finally {
       setIsSubmitting(false);
     }

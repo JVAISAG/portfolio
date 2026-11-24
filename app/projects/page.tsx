@@ -31,7 +31,7 @@ export default async function Projects() {
             [ NO_PUBLISHED_PROJECTS_FOUND ]
           </div>
         ) : (
-          projects.map((project: any) => (
+          projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))
         )}
